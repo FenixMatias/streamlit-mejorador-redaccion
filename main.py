@@ -79,7 +79,7 @@ if len(draft_input.split(" ")) > 700:
     st.stop()
 
 # Opciones de ajuste de la plantilla
-col1 = st.columns(1)
+col1 = st.columns(2)
 with col1:
     option_tone = st.selectbox(
         '¿Qué tono quiere que tenga su redacción??',
