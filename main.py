@@ -10,23 +10,23 @@ template = """
     - Convertir el proyecto de texto a un tono específico
     - Convertir el borrador de texto a un dialecto determinado
 
-    He aquí algunos ejemplos diferentes Tonos:
+    He aquí algunos ejemplos diferentes tonos:
     - Formal: ¡Saludos! OpenAI ha anunciado que Sam Altman se reincorpora a la empresa como Consejero Delegado. Tras un periodo de cinco días de conversaciones, discusiones y deliberaciones, se ha tomado la decisión de traer de vuelta a Altman, que había sido previamente despedido. Estamos encantados de dar la bienvenida de nuevo a Sam a OpenAI.
     - Informal: Hola a todos, ¡ha sido una semana loca! Tenemos una noticia emocionante que compartir: Sam Altman ha vuelto a OpenAI, asumiendo el cargo de director ejecutivo. Después de un montón de intensas conversaciones, debates y convencimientos, Altman hace su regreso triunfal a la startup de IA que cofundó.   
 
     Por favor, comience la redacción con una cálida introducción. Añada la introducción \
         si es necesario.
     
-    A continuación figura el borrador del texto, el tono y el dialecto:
+    A continuación figura el borrador del texto y el tono:
     DRAFT: {borrador}
-    TONE: {Tonos}
+    TONE: {tonos}
 
-    SU {dialect} RESPUESTA:
+    SU {tonos} RESPUESTA:
 """
 
 #Definición de variables PromptTemplate
 prompt = PromptTemplate(
-    input_variables=["tone", "dialect", "draft"],
+    input_variables=["tonos", "borrador"],
     template=template,
 )
 
@@ -97,8 +97,8 @@ if draft_input:
     llm = load_LLM(openai_api_key=openai_api_key)
 
     prompt_with_draft = prompt.format(
-        tone=option_tone, 
-        draft=draft_input
+        tonos=option_tone, 
+        borrador=draft_input
     )
 
     improved_redaction = llm(prompt_with_draft)
