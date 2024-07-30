@@ -18,9 +18,8 @@ template = """
         si es necesario.
     
     A continuación figura el borrador del texto, el tono y el dialecto:
-    DRAFT: {draft}
-    TONE: {tone}
-    DIALECT: {dialect}
+    DRAFT: {borrador}
+    TONE: {Tonos}
 
     SU {dialect} RESPUESTA:
 """
