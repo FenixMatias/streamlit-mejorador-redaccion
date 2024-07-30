@@ -4,69 +4,59 @@ from langchain_openai import OpenAI
 
 
 template = """
-    Below is a draft text that may be poorly worded.
-    Your goal is to:
-    - Properly redact the draft text
-    - Convert the draft text to a specified tone
-    - Convert the draft text to a specified dialect
+    A continuación encontrará un borrador de texto que puede estar mal redactado.
+    Su objetivo es:
+    - Redactar correctamente el borrador de texto
+    - Convertir el proyecto de texto a un tono específico
+    - Convertir el borrador de texto a un dialecto determinado
 
-    Here are some examples different Tones:
-    - Formal: Greetings! OpenAI has announced that Sam Altman is rejoining the company as its Chief Executive Officer. After a period of five days of conversations, discussions, and deliberations, the decision to bring back Altman, who had been previously dismissed, has been made. We are delighted to welcome Sam back to OpenAI.
-    - Informal: Hey everyone, it's been a wild week! We've got some exciting news to share - Sam Altman is back at OpenAI, taking up the role of chief executive. After a bunch of intense talks, debates, and convincing, Altman is making his triumphant return to the AI startup he co-founded.  
+    He aquí algunos ejemplos diferentes Tonos:
+    - Formal: ¡Saludos! OpenAI ha anunciado que Sam Altman se reincorpora a la empresa como Consejero Delegado. Tras un periodo de cinco días de conversaciones, discusiones y deliberaciones, se ha tomado la decisión de traer de vuelta a Altman, que había sido previamente despedido. Estamos encantados de dar la bienvenida de nuevo a Sam a OpenAI.
+    - Informal: Hola a todos, ¡ha sido una semana loca! Tenemos una noticia emocionante que compartir: Sam Altman ha vuelto a OpenAI, asumiendo el cargo de director ejecutivo. Después de un montón de intensas conversaciones, debates y convencimientos, Altman hace su regreso triunfal a la startup de IA que cofundó.   
 
-    Here are some examples of words in different dialects:
-    - American: French Fries, cotton candy, apartment, garbage, \
-        cookie, green thumb, parking lot, pants, windshield
-    - British: chips, candyfloss, flag, rubbish, biscuit, green fingers, \
-        car park, trousers, windscreen
-
-    Example Sentences from each dialect:
-    - American: Greetings! OpenAI has announced that Sam Altman is rejoining the company as its Chief Executive Officer. After a period of five days of conversations, discussions, and deliberations, the decision to bring back Altman, who had been previously dismissed, has been made. We are delighted to welcome Sam back to OpenAI.
-    - British: On Wednesday, OpenAI, the esteemed artificial intelligence start-up, announced that Sam Altman would be returning as its Chief Executive Officer. This decisive move follows five days of deliberation, discourse and persuasion, after Altman's abrupt departure from the company which he had co-established.
-
-    Please start the redaction with a warm introduction. Add the introduction \
-        if you need to.
+    Por favor, comience la redacción con una cálida introducción. Añada la introducción \
+        si es necesario.
     
-    Below is the draft text, tone, and dialect:
+    A continuación figura el borrador del texto, el tono y el dialecto:
     DRAFT: {draft}
     TONE: {tone}
     DIALECT: {dialect}
 
-    YOUR {dialect} RESPONSE:
+    SU {dialect} RESPUESTA:
 """
 
-#PromptTemplate variables definition
+#Definición de variables PromptTemplate
 prompt = PromptTemplate(
     input_variables=["tone", "dialect", "draft"],
     template=template,
 )
 
 
-#LLM and key loading function
+#LLM y función de carga de llaves
 def load_LLM(openai_api_key):
-    """Logic for loading the chain you want to use should go here."""
+    """La lógica para cargar la cadena que desea utilizar debe ir aquí."""
     # Make sure your openai_api_key is set as an environment variable
     llm = OpenAI(temperature=.7, openai_api_key=openai_api_key)
     return llm
 
 
-#Page title and header
-st.set_page_config(page_title="Re-write your text")
-st.header("Re-write your text")
+#Título y cabecera de la página
+st.set_page_config(page_title="Reescriba su texto")
+st.header("Reescriba su texto")
 
 
-#Intro: instructions
+#Intro: instrucciones
 col1, col2 = st.columns(2)
 
 with col1:
-    st.markdown("Re-write your text in different styles.")
+    st.markdown("Reescribe tu texto en diferentes estilos.")
 
 with col2:
-    st.write("Contact with [AI Accelera](https://aiaccelera.com) to build your AI Projects")
+    st.write("Contacte con [Matias Toro Labra](https://www.linkedin.com/in/luis-matias-toro-labra-b4074121b/) para construir sus proyectos de IA")
 
 
-#Input OpenAI API Key
-st.markdown("## Enter Your OpenAI API Key")
+#Introducir la clave API de OpenAI
+st.markdown("## Introduzca su clave API de OpenAI")
 
 def get_openai_api_key():
     input_text = st.text_input(label="OpenAI API Key ",  placeholder="Ex: sk-2twmA8tfCb8un4...", key="openai_api_key_input", type="password")
@@ -75,38 +65,32 @@ def get_openai_api_key():
 openai_api_key = get_openai_api_key()
 
 
-# Input
-st.markdown("## Enter the text you want to re-write")
+# Entrada
+st.markdown("## Introduzca el texto que desea reescribir")
 
 def get_draft():
-    draft_text = st.text_area(label="Text", label_visibility='collapsed', placeholder="Your Text...", key="draft_input")
+    draft_text = st.text_area(label="Text", label_visibility='collapsed', placeholder="Su texto...", key="draft_input")
     return draft_text
 
 draft_input = get_draft()
 
 if len(draft_input.split(" ")) > 700:
-    st.write("Please enter a shorter text. The maximum length is 700 words.")
+    st.write("Por favor, introduzca un texto más corto. La longitud máxima es de 700 palabras.")
     st.stop()
 
-# Prompt template tunning options
-col1, col2 = st.columns(2)
+# Opciones de ajuste de la plantilla
+col1 = st.columns(1)
 with col1:
     option_tone = st.selectbox(
-        'Which tone would you like your redaction to have?',
+        '¿Qué tono quiere que tenga su redacción??',
         ('Formal', 'Informal'))
     
-with col2:
-    option_dialect = st.selectbox(
-        'Which English Dialect would you like?',
-        ('American', 'British'))
-    
-    
-# Output
-st.markdown("### Your Re-written text:")
+# Salida
+st.markdown("### Su texto reescrito:")
 
 if draft_input:
     if not openai_api_key:
-        st.warning('Please insert OpenAI API Key. \
+        st.warning('Introduzca su OpenAI API Key. \
             Instructions [here](https://help.openai.com/en/articles/4936850-where-do-i-find-my-secret-api-key)', 
             icon="⚠️")
         st.stop()
@@ -115,7 +99,6 @@ if draft_input:
 
     prompt_with_draft = prompt.format(
         tone=option_tone, 
-        dialect=option_dialect, 
         draft=draft_input
     )
 
